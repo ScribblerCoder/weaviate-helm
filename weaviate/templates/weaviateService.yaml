@@ -16,6 +16,12 @@ spec:
   selector:
     app: weaviate
   ports:
+{{- if and .Values.env.PROMETHEUS_MONITORING_ENABLED .Values.serviceMonitor.enabled }}
+    - name: metrics
+      protocol: TCP
+      port: 2112
+      targetPort: 2112
+{{- end }}
     {{- range .Values.service.ports }}
     - {{ toYaml . | indent 6 | trim }}
       targetPort: 8080
